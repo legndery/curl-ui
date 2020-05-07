@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import {
-    fetchResponse
+    fetchResponse,
+    executeCurlRequest
 } from './async-actions/fetch-process-request';
 import {
     getSavedRequest
@@ -24,7 +25,9 @@ export const store = new Vuex.Store({
         snackBar: {
             visible: false,
             text: ''
-        }
+        },
+        curlCode: "",
+        curlResponse: ""
     },
     getters: {
         inputData: state => state.inputData,
@@ -34,7 +37,9 @@ export const store = new Vuex.Store({
         requestHeaders: state => state.inputData.requestHeaders,
         response: state => state.response,
         snackBarState: state => state.snackBar.visible,
-        snackBarText: state => state.snackBar.text
+        snackBarText: state => state.snackBar.text,
+        curlCode: state => state.curlCode,
+        curlResponse: state => state.curlResponse
     },
     mutations: {
         setInputData(state, inputData){
@@ -73,7 +78,14 @@ export const store = new Vuex.Store({
         },
         hideSnackBar(state){
             state.snackBar.visible = false;
-        }
+        },
+        setCurlCode(state, curlCode){
+            state.curlCode = curlCode;
+        },
+        setCurlResponse(state, responseBody){
+            console.log("new req", responseBody);
+            state.curlResponse = responseBody;
+        },
     },
     actions: {
         setInputData({commit}, inputData){
@@ -103,6 +115,13 @@ export const store = new Vuex.Store({
         hideSnackBar({commit}){
             commit('hideSnackBar');
         },
+        setCurlResponse({commit}, responseBody){
+            commit('setCurlResponse', responseBody);
+        },
+        setCurlCode({commit}, curlCode){
+            commit('setCurlCode', curlCode);
+        },
+        executeCurlRequest,
         fetchResponse,
         getSavedRequest,
         saveRequest

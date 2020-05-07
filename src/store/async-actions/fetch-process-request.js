@@ -54,4 +54,25 @@ export function fetchResponse({ getters, dispatch }) {
         });
 }
 
+export function executeCurlRequest({ getters, dispatch }) {
+    const code = getters.curlCode;
+    fetch('/curl', {
+        method:'post',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({code})
+    })
+    .then(resp => resp.text())
+    .then(resp=>{
+        const time="Timestamp: "+Date.now()+"\n"
+        dispatch('setCurlResponse', time+resp);
+    })
+    .catch(err=>{
+        console.log(err.message)
+        dispatch('setCurlResponse', err.message);
+    })
+    
+}
+
 export default fetchResponse;

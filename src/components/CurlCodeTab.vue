@@ -1,6 +1,31 @@
 <template>
     <div class="curl-tab">
         <div class="md-title">cURL</div>
+        <div style="width:100%">
+        <div class="grid-container">
+            <div class="grid-item" style="margin-left:0">
+                <md-checkbox v-model="isKubectl" style="padding-top:16px" >Kubectl</md-checkbox>
+            </div>
+            <div class="grid-item">
+                <md-field md-inline class="fetch-url-input">
+                    <label>context</label>
+                    <md-input v-model="kubeContext"></md-input>
+                </md-field>
+            </div>
+            <div class="grid-item">
+                <md-field md-inline class="fetch-url-input">
+                    <label>namespace</label>
+                    <md-input v-model="kubeNamespace"></md-input>
+                </md-field>
+            </div>
+            <div class="grid-item">
+                <md-field md-inline class="fetch-url-input">
+                    <label>pod</label>
+                    <md-input v-model="kubePod"></md-input>
+                </md-field>
+            </div>
+        </div>
+        </div>
         <md-checkbox
             v-model="isInsecure"
             class="insecure-toggle"
@@ -21,6 +46,11 @@
                 class="md-primary"
                 @click="$emit('copy-output-code', computedCurlCode)"
             >copy</md-button>
+            <md-button
+                class="md-primary"
+                @click="getCurlDataAndExecute"
+            >Execute</md-button>
+            <codemirror :value="curlRespComputed" :options="editorOptions"></codemirror>
         </md-content>
     </div>
 </template>
@@ -29,15 +59,19 @@
 
 require('codemirror/mode/shell/shell');
 import get from 'lodash/get';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions} from 'vuex';
 
 export default {
     name: 'CurlCodeTab',
     data: function () {
         return {
+            kubeContext: "",
+            kubeNamespace: "",
+            kubePod: "",
+            isKubectl: false,
             isInsecure: false,
             copyToClip: false,
-            dumpHeaders: false,
+            dumpHeaders: true,
             editorOptions: {
                 mode: 'text/x-sh',
                 tabSize: 2,
@@ -48,7 +82,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['inputData']),
+        ...mapGetters(['inputData','curlResponse']),
         computedHeadersStr: function () {
             const headers = Object.keys(this.inputData.requestHeaders);
             if (headers.length > 0) {
@@ -78,10 +112,27 @@ export default {
             return (this.copyToClip) ? (copyToClip) : ('');
         },
         computedCurlCode: function () {
-            return `curl ${this.computedInsecureStr}${this.computedDumpHeaderStr}-X${this.inputData.method}`+
+            console.log("called");
+            let retStr = ``;
+            if(this.isKubectl){
+                retStr = `kubectl --context ${this.kubeContext} -n ${this.kubeNamespace} exec -it ${this.kubePod} -- `
+            }
+            return `${retStr}curl ${this.computedInsecureStr}${this.computedDumpHeaderStr}-X${this.inputData.method}`+
             `${this.computedHeadersStr}${this.computedRequestBodyStr}"`+
             `${this.inputData.fetchUrl}"${ this.computedCopyToClipStr }`;
+        },
+        curlRespComputed: function() {
+            console.log("->",this.curlResponse)
+            return this.curlResponse;
         }
+    },
+    methods:{
+        getCurlDataAndExecute: function(){
+            const code = this.computedCurlCode;
+            this.setCurlCode(code)
+            this.executeCurlRequest()
+        },
+        ...mapActions(['executeCurlRequest','setCurlCode','setCurlResponse'])
     }
 };
 </script>
@@ -89,6 +140,14 @@ export default {
 <style lang="scss" scoped>
 .output-code {
   padding: 10px;
+}
+.grid-container {
+  display: inline-grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-end: 4;
+}
+.grid-item {
+  margin: 10px;
 }
 </style>
 
