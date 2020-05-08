@@ -9,21 +9,21 @@
         <HeaderForm />
       </md-content>
       <md-content class="output-tab md-elevation-2">
-        <md-tabs :md-active-tab="'tab-'+$route.path.slice(1)">
-          <md-tab id="tab-response" md-label="Response" to="/response">
+        <md-tabs :md-active-tab="'tab-curl'">
+          <!-- <md-tab id="tab-response" md-label="Response" to="/response">
           </md-tab>
           <md-tab id="tab-fetch" md-label="JavaScript" to="/fetch">
-          </md-tab>
+          </md-tab> -->
           <md-tab id="tab-curl" md-label="cURL" to="/curl">
           </md-tab>
-          <md-tab id="tab-csharp" md-label="C#" to="/csharp">
+          <!-- <md-tab id="tab-csharp" md-label="C#" to="/csharp">
           </md-tab>
           <md-tab id="tab-http" md-label="HTTP" to="/http">
           </md-tab>
           <md-tab id="tab-powershell" md-label="PowerShell" to="/powershell">
           </md-tab>
           <md-tab id="tab-java" md-label="Java" to="/java">
-          </md-tab>
+          </md-tab> -->
         </md-tabs>
         <hr>
         <router-view @copy-output-code="copyOutputCode" class="current-code-component"></router-view>

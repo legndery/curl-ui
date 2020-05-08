@@ -13,46 +13,46 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    {
-      path: '/response/:id?',
-      name: 'response',
-      component: ResponseTab
-    },
-    {
-      path: '/curl/:id?',
-      name: 'curl',
-      component: CurlCodeTab
-    },
-    {
-      path: '/csharp/:id?',
-      name: 'csharp',
-      component: CsharpCodeTab
-    },
-    {
-      path: '/http/:id?',
-      name: 'http',
-      component: HttpCodeTab
-    },
-    {
-      path: '/powershell/:id?',
-      name: 'powershell',
-      component: PowerShellCodeTab
-    },
-    {
-      path: '/java/:id?',
-      name: 'java',
-      component: JavaCodeTab
-    },
-    {
-      path: '/fetch/:id?',
-      alias: '/:id?',
-      name: 'fetch',
-      component: FetchCodeTab
-    },
+    // {
+    //   path: '/response/:id?',
+    //   name: 'response',
+    //   component: ResponseTab
+    // },
+    // {
+    //   path: '/curl/:id?',
+    //   name: 'curl',
+    //   component: CurlCodeTab
+    // },
+    // {
+    //   path: '/csharp/:id?',
+    //   name: 'csharp',
+    //   component: CsharpCodeTab
+    // },
+    // {
+    //   path: '/http/:id?',
+    //   name: 'http',
+    //   component: HttpCodeTab
+    // },
+    // {
+    //   path: '/powershell/:id?',
+    //   name: 'powershell',
+    //   component: PowerShellCodeTab
+    // },
+    // {
+    //   path: '/java/:id?',
+    //   name: 'java',
+    //   component: JavaCodeTab
+    // },
+    // {
+    //   path: '/fetch/:id?',
+    //   alias: '/:id?',
+    //   name: 'fetch',
+    //   component: FetchCodeTab
+    // },
     {
       path: '/:id?',
       name: 'home',
-      component: FetchCodeTab
+      component: CurlCodeTab
     }
   ]
 })

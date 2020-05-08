@@ -7,19 +7,19 @@
                 <md-checkbox v-model="isKubectl" style="padding-top:16px" >Kubectl</md-checkbox>
             </div>
             <div class="grid-item">
-                <md-field md-inline class="fetch-url-input">
+                <md-field class="fetch-url-input">
                     <label>context</label>
                     <md-input v-model="kubeContext"></md-input>
                 </md-field>
             </div>
             <div class="grid-item">
-                <md-field md-inline class="fetch-url-input">
+                <md-field class="fetch-url-input">
                     <label>namespace</label>
                     <md-input v-model="kubeNamespace"></md-input>
                 </md-field>
             </div>
             <div class="grid-item">
-                <md-field md-inline class="fetch-url-input">
+                <md-field class="fetch-url-input">
                     <label>pod</label>
                     <md-input v-model="kubePod"></md-input>
                 </md-field>
