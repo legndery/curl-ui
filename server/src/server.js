@@ -10,11 +10,11 @@ const _ = require('lodash');
 
 app.use(bodyParser.json())
 app.use(cors());
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
   console.table({
     "URL": req.url,
     "Query:": JSON.stringify(req.query),
-    "Method":req.method,
+    "Method": req.method,
     "Body": JSON.stringify(req.body),
     "Params:": JSON.stringify(req.params),
   })
@@ -25,15 +25,17 @@ app.get('/', (req, res) => {
 });
 app.post('/curl', timeout('30s'), (req, res) => {
   const { body } = req;
-  const { stdout, stderr, code } = shellJs.exec(body.code, { silent: true })
   console.log("Running Command: ", chalk.whiteBright(body.code));
-  let result = ""
-  if (!code) {
-    result = stdout;
-  } else {
-    result = stderr
-  }
-  res.send(result);
+  shellJs.exec(body.code, { silent: true }, (code, stdout, stderr) => {
+    console.log(chalk.whiteBright.bold("Command complete!"));
+    let result = ""
+    if (!code) {
+      result = stdout;
+    } else {
+      result = stderr
+    }
+    res.send(result);
+  })
 });
 
 app.post('/getpods', timeout('30s'), (req, res) => {
@@ -42,19 +44,21 @@ app.post('/getpods', timeout('30s'), (req, res) => {
   } } = req;
   const shellCode = `kubectl --context ${context} -n ${namespace} get pods -o json`;
   console.log(chalk.redBright("Running Command: "), chalk.whiteBright.bold(shellCode));
-  const { stdout, stderr, code } = shellJs.exec(shellCode, { silent: true })
-  let pods;
-  let error = undefined;
-  if (!code) {
-    pods = _.get(JSON.parse(stdout),'items',[]).map(pod=> pod.metadata.name);
-  } else {
-    pods = []
-    error = stderr
-  }
-  res.json({
-    pods,
-    error
-  });
+  shellJs.exec(shellCode, { silent: true }, (code, stdout, stderr) => {
+    console.log(chalk.whiteBright.bold("Command complete!"));
+    let pods;
+    let error = undefined;
+    if (!code) {
+      pods = _.get(JSON.parse(stdout), 'items', []).map(pod => pod.metadata.name);
+    } else {
+      pods = []
+      error = stderr
+    }
+    res.json({
+      pods,
+      error
+    });
+  })
 })
 app.use('/', express.static(path.resolve(__dirname, '../../dist/')))
 
