@@ -18,8 +18,8 @@ module.exports = (env, argv) => {
         plugins.push(new BundleAnalyzerPlugin());
         plugins.push(new UglifyJsPlugin());
         plugins.push(new CompressionPlugin);
-        STATIC_JSON_DATA_URL = '/fetcher/data/http-headers.json';
-        STATIC_ICONS_BASE = '/fetcher/assets/'
+        STATIC_JSON_DATA_URL = '/data/http-headers.json';
+        STATIC_ICONS_BASE = '/assets/'
         IS_PROD = true;
     }
 

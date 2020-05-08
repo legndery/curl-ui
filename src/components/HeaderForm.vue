@@ -15,8 +15,8 @@
         </div>
         <div>
             <md-list @click="deleteHeader($event.target.dataset.header)">
-                <md-list-item v-for="(value, key) in requestHeaders" :key="key">
-                    '{{key}}': '{{value}}'
+                <md-list-item v-for="(value, key) in requestHeaders" :key="key"  class="word-wrapper">
+                    <span class="md-list-item-text"><p>'{{key}}': '{{value}}'</p></span>
                     <md-button class="md-icon-button">
                         <span :data-header='key'>
                             <md-icon :md-src="deleteIcon" class="delete-icon"></md-icon>
@@ -77,6 +77,10 @@ export default {
 
 .delete-icon {
     pointer-events: none;
+}
+.word-wrapper {
+    flex-wrap: wrap;
+    white-space: normal;
 }
 
 </style>
