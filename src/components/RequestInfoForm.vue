@@ -4,31 +4,38 @@
       <label>url</label>
       <md-input v-model="fetchUrl"></md-input>
     </md-field>
-    <br/>
+    <br />
     <md-field>
       <label for="method">method</label>
-      <md-select v-model="method" name="method" id="method" class="http-method-input">
+      <md-select
+        v-model="method"
+        name="method"
+        id="method"
+        class="http-method-input"
+      >
         <md-option
           :value='httpMethod'
-          :key="i" v-for="(httpMethod, i) in httpMethods"
+          :key="i"
+          v-for="(httpMethod, i) in httpMethods"
         >{{httpMethod}}</md-option>
       </md-select>
     </md-field>
-    <br/>
-    <md-field>
-      <label>body</label>
-      <md-textarea v-model="requestBody" class="request-body"></md-textarea>
-    </md-field>
+    <br />
+      <codemirror
+        v-model="requestBody"
+        :options="editorOptions"
+        class="request-body"
+      ></codemirror>
   </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import { mapActions } from 'vuex';
 import router from './../router';
-import {httpMethods} from './../enums/http-methods';
+import { httpMethods } from './../enums/http-methods';
 
 export default {
-  computed:{
+  computed: {
     fetchUrl: {
       get: function () {
         return this.$store.getters.fetchUrl;
@@ -56,13 +63,20 @@ export default {
   },
   data: function () {
     return {
-      httpMethods: Object.values(httpMethods)
+      httpMethods: Object.values(httpMethods),
+      editorOptions: {
+        mode: 'javascript',
+        tabSize: 2,
+        lineWrapping: true,
+        lineNumbers: true,
+        smartIndent: true
+      }
     };
   },
   methods: {
     ...mapActions(['getSavedRequest'])
   },
-  mounted(){
+  mounted() {
     router.onReady(() => this.getSavedRequest());
   }
 };
@@ -72,6 +86,7 @@ export default {
 .request-body {
   font-family: monospace;
   font-size: 14px;
+  // widows: 100%;
 }
 </style>
 

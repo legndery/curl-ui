@@ -3,25 +3,49 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const shellJs = require('shelljs');
+const cors = require('cors');
 app.use(bodyParser.json())
+app.use(cors());
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../dist/index.html'));
 });
-app.post('/curl', (req, res)=>{
-  const {body} = req;
-  const {stdout, stderr, code } = shellJs.exec(body.code, {silent: true})
+app.post('/curl', (req, res) => {
+  const { body } = req;
+  const { stdout, stderr, code } = shellJs.exec(body.code, { silent: true })
   let result = ""
-  if(!code){
+  if (!code) {
     result = stdout;
-  }else{
+  } else {
     result = stderr
   }
   res.send(result);
+});
+
+app.post('/getpods', (req, res) => {
+  const { body: {
+    context, namespace
+  } } = req;
+  console.log(req.body);
+  const shellCode = `kubectl --context ${context} -n ${namespace} get pods`;
+  console.log(shellCode);
+  const { stdout, stderr, code } = shellJs.exec(shellCode, { silent: true })
+  let pods;
+  let error = undefined;
+  if (!code) {
+    pods = stdout.split('\n');
+  } else {
+    pods = []
+    error = stderr
+  }
+  res.json({
+    pods,
+    error
+  });
 })
 app.use('/', express.static(path.resolve(__dirname, '../../dist/')))
 
 
-app.listen(8080, ()=>{
+app.listen(8080, () => {
   console.log("Server started at: http://127.0.0.1:8080");
 })

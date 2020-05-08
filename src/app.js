@@ -18,6 +18,7 @@ import VueCodeMirror from 'vue-codemirror-lite';
 import 'vue-material/dist/vue-material.min.css';
 
 require('codemirror/addon/display/autorefresh');
+require('codemirror/mode/javascript/javascript');
 
 [
 	VueCodeMirror,

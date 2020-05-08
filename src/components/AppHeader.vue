@@ -7,14 +7,9 @@
       <span class="app-logo">
         <md-icon :md-src="appLogo" />
       </span>
-      <a href="https://github.com/pranayrauthu/fetcher" target="_blank" class="github-link">
+      <a href="https://github.com/legndery/curl-ui" target="_blank" class="github-link">
         <md-button class="md-icon-button">
           <md-icon :md-src="githubLogo"></md-icon>
-        </md-button>
-      </a>
-      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fpranayrauthu%2Ffetcher&via=pranay_rauthu&text=generate%20HTTP%20request%20code%20with&hashtags=fetcher" target="_blank">
-        <md-button class="md-icon-button">
-          <md-icon :md-src="shareIcon"></md-icon>
         </md-button>
       </a>
     </md-toolbar>

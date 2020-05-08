@@ -18,7 +18,7 @@ export const store = new Vuex.Store({
         inputData: {
             method: "GET",
             fetchUrl: "",
-            requestBody: "",    
+            requestBody: "Request body",    
             requestHeaders: {}
         },
         response: 'click on send to see the response.',
