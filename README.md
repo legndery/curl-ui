@@ -1,20 +1,51 @@
-# Fetcher
+# Curl UI
 
-generate HTTP request code for various languages. try it for free [here](https://pranayrauthu.github.io/fetcher/).
+This will basically convert a request to cURL request and using your machine's curl it will execute it.
 
-**Generates Snippets for**
+### Basic cURL support
+This will literally run a cURL with arguments provided
 
-- JavaScript Fetch
-- cURL
-- HTTP
-- C#
-- PowerShell
-- Java
+```
+curl <args>
+```
 
-**Other Features**
+### Kubectl Support
 
-- HTTP Response (beta)
+To hit protected urls from inside cluster. Which is basically
 
-**License**
+```
+kubectl exec -it podName -- curl <args>
+```
 
-MIT
+### Any custom curl
+
+```
+<PATH OF CURL> args
+```
+
+## To Run the application:
+
+### Global Installation 
+```
+Work in progress
+```
+
+### Local installation
+```
+git clone git@github.com:legndery/curl-ui.git
+```
+Then only install the production dependancies and start it:
+```
+cd curl-ui
+npm i --only=prod
+npm start
+```
+go to http://127.0.0.1:8080
+
+
+## Changelog
+
+07-05-2020:
+- Add Running curl suppport by running a nodejs server
+- Add kubectl support
+- Delete cookie support
