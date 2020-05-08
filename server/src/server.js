@@ -6,7 +6,7 @@ const shellJs = require('shelljs');
 app.use(bodyParser.json())
 
 app.get('/', (req, res)=>{
-  res.sendfile(path.resolve(__dirname, '../../dist/index.html'));
+  res.sendFile(path.resolve(__dirname, '../../dist/index.html'));
 });
 app.post('/curl', (req, res)=>{
   const {body} = req;
@@ -23,5 +23,5 @@ app.use('/', express.static(path.resolve(__dirname, '../../dist/')))
 
 
 app.listen(8080, ()=>{
-  console.log("Server started");
+  console.log("Server started at: http://127.0.0.1:8080");
 })
