@@ -60,6 +60,26 @@ app.post('/getpods', timeout('30s'), (req, res) => {
     });
   })
 })
+
+app.post('/authPKS',  timeout('30s'), (req, res)=>{
+  const {
+    body: {
+      env, password, username
+    }
+  } = req;
+  const genCode = pass => `echo ${pass} | pks get-kubeconfig ${env} -u ${username} -a api.dc-pks.idfcbank.com -k`
+  console.log(chalk.redBright("Running Command: "), chalk.whiteBright.bold(genCode('****')));
+  shellJs.exec(genCode(password), { silent: true }, (code, stdout, stderr) => {
+    console.log(chalk.whiteBright.bold("Command complete!"));
+    let result = ""
+    if (!code) {
+      result = stdout;
+    } else {
+      result = stderr
+    }
+    res.send(result);
+  })
+});
 app.use('/', express.static(path.resolve(__dirname, '../../dist/')))
 
 
