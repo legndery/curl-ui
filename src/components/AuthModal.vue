@@ -12,10 +12,10 @@
       </md-field>
       <md-field class="fetch-url-input">
         <label>Password</label>
-        <md-input v-model="password"></md-input>
+        <md-input v-model="password" type="password"></md-input>
       </md-field>
       <md-field class="fetch-url-input">
-        <label>Password</label>
+        <label>Environment</label>
         <md-input v-model="env"></md-input>
       </md-field>
       <md-button
