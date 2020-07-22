@@ -3,20 +3,22 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const shellJs = require('shelljs');
+const execSh = require('exec-sh');
 const cors = require('cors');
 const timeout = require('connect-timeout');
 const chalk = require('chalk');
 const _ = require('lodash');
+const PORT = process.env.FETCHER_PORT || 8080;
 
 app.use(bodyParser.json())
 app.use(cors());
 app.use((req, res, next) => {
   console.table({
     "URL": req.url,
-    "Query:": JSON.stringify(req.query),
+    // "Query:": JSON.stringify(req.query),
     "Method": req.method,
-    "Body": JSON.stringify(req.body),
-    "Params:": JSON.stringify(req.params),
+    // "Body": JSON.stringify(req.body),
+    // "Params:": JSON.stringify(req.params),
   })
   next();
 })
@@ -69,20 +71,19 @@ app.post('/authPKS',  timeout('30s'), (req, res)=>{
   } = req;
   const genCode = pass => `echo ${pass} | pks get-kubeconfig ${env} -u ${username} -a api.dc-pks.idfcbank.com -k`
   console.log(chalk.redBright("Running Command: "), chalk.whiteBright.bold(genCode('****')));
-  shellJs.exec(genCode(password), { silent: true }, (code, stdout, stderr) => {
+  execSh(genCode(password), {stdio:['pipe','pipe','pipe']},function(err){
     console.log(chalk.whiteBright.bold("Command complete!"));
-    let result = ""
-    if (!code) {
-      result = stdout;
-    } else {
-      result = stderr
+    const resp = Array.prototype.slice.call(arguments).join('');
+    if(err){
+      res.send(resp)
+    }else{
+      res.send(resp+"\nSuccess: You are logged in");
     }
-    res.send(result);
-  })
+  });
 });
 app.use('/', express.static(path.resolve(__dirname, '../../dist/')))
 
 
-app.listen(8080, () => {
-  console.log(`Server started at: http://127.0.0.1:8080`);
+app.listen(PORT, () => {
+  console.log(`Server started at: http://127.0.0.1:${PORT}`);
 })
