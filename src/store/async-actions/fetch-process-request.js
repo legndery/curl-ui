@@ -57,22 +57,48 @@ export function fetchResponse({ getters, dispatch }) {
 export function executeCurlRequest({ getters, dispatch }) {
     const code = getters.curlCode;
     fetch('/curl', {
-        method:'post',
+        method: 'post',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({code})
+        body: JSON.stringify({ code })
     })
+        .then(resp => resp.text())
+        .then(resp => {
+            const time = "Timestamp: " + Date.now() + "\n"
+            dispatch('setCurlResponse', time + resp);
+        })
+        .catch(err => {
+            console.log(err.message)
+            dispatch('setCurlResponse', err.message);
+        })
+
+}
+function fetchStatusHandler(response) {
+    if (response.status === 200) {
+      return response;
+    } else {
+      throw new Error(response.statusText);
+    }
+  }
+export function executeAuthRequest({ getters, dispatch }) {
+    fetch('/authPKS', {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(getters.pksCreds)
+    })
+    .then(fetchStatusHandler)
     .then(resp => resp.text())
-    .then(resp=>{
-        const time="Timestamp: "+Date.now()+"\n"
-        dispatch('setCurlResponse', time+resp);
+    .then(resp => {
+        dispatch('setAuthResponse', resp);
     })
-    .catch(err=>{
+    .catch(err => {
         console.log(err.message)
-        dispatch('setCurlResponse', err.message);
+        dispatch('setAuthResponse', "Error: "+err.message);
     })
-    
+
 }
 
 export default fetchResponse;

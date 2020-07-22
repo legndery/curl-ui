@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import {
     fetchResponse,
-    executeCurlRequest
+    executeCurlRequest,
+    executeAuthRequest
 } from './async-actions/fetch-process-request';
 import {
     getSavedRequest
@@ -27,7 +28,13 @@ export const store = new Vuex.Store({
             text: ''
         },
         curlCode: "",
-        curlResponse: ""
+        curlResponse: "",
+        authResponse: "",
+        pksCreds: {
+            username: "",
+            password: "",
+            env: ""
+        },
     },
     getters: {
         inputData: state => state.inputData,
@@ -39,7 +46,9 @@ export const store = new Vuex.Store({
         snackBarState: state => state.snackBar.visible,
         snackBarText: state => state.snackBar.text,
         curlCode: state => state.curlCode,
-        curlResponse: state => state.curlResponse
+        curlResponse: state => state.curlResponse,
+        pksCreds: state => state.pksCreds,
+        authResponse: state => state.authResponse
     },
     mutations: {
         setInputData(state, inputData){
@@ -86,6 +95,12 @@ export const store = new Vuex.Store({
             console.log("new req", responseBody);
             state.curlResponse = responseBody;
         },
+        setPksCreds(state, pksCreds){
+            state.pksCreds = pksCreds;
+        },
+        setAuthResponse(state, responseBody){
+            state.authResponse = responseBody;
+        }
     },
     actions: {
         setInputData({commit}, inputData){
@@ -121,10 +136,17 @@ export const store = new Vuex.Store({
         setCurlCode({commit}, curlCode){
             commit('setCurlCode', curlCode);
         },
+        setPksCreds({commit}, pksCreds){
+            commit('setPksCreds', pksCreds);
+        },
+        setAuthResponse({commit}, responseBody){
+            commit('setAuthResponse', responseBody);
+        },
         executeCurlRequest,
         fetchResponse,
         getSavedRequest,
-        saveRequest
+        saveRequest,
+        executeAuthRequest
     }
 });
 

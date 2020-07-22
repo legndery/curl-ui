@@ -1,6 +1,13 @@
 <template>
   <div class="curl-tab">
-    <div class="md-title">cURL</div>
+    <modal-direction v-model="modalOpen"></modal-direction>
+    <div class="md-title">
+      <span style="line-height:2">cURL</span>
+      <md-button
+        class="md-primary"
+        style="margin:0;margin-left:20px"
+        @click="openAuthModal"
+      >Authenticate PKS</md-button></div>
     <div style="width:100%">
       <div class="grid-container">
         <div
@@ -77,11 +84,13 @@
 require('codemirror/mode/shell/shell');
 import get from 'lodash/get';
 import { mapGetters, mapActions } from 'vuex';
+import ModalDirection from "./AuthModal.vue";
 
 export default {
   name: 'CurlCodeTab',
   data: function () {
     return {
+      modalOpen: false,
       kubeContext: "",
       kubeNamespace: "",
       kubePod: "",
@@ -148,6 +157,9 @@ export default {
       this.setCurlCode(code)
       this.executeCurlRequest()
     },
+    openAuthModal: function () {
+      this.modalOpen = !this.modalOpen;
+    },
     getPods: function () {
         console.log("efafe")
       const context = this.kubeContext;
@@ -171,6 +183,9 @@ export default {
         })
     },
     ...mapActions(['executeCurlRequest', 'setCurlCode', 'setCurlResponse'])
+  },
+  components: {
+    ModalDirection
   }
 };
 </script>
